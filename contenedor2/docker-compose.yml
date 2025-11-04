@@ -3,32 +3,33 @@ version: "3.9"
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: db_telefonica
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: sistema_telefonico
     ports:
       - "3306:3306"
     volumes:
-      - ./dbdata:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   servidor:
-    build:
-      context: .
-      dockerfile: Dockerfile.servidor
+    build: ./contenedor1
     container_name: servidor_java
     depends_on:
       - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASS=root
     ports:
       - "9599:9599"
 
-  cliente:
-    build:
-      context: .
-      dockerfile: Dockerfile.cliente
-    container_name: cliente_java
+  Cliente:
+    build: ./contenedor2
+    container_name: Cliente_java
     depends_on:
       - servidor
     stdin_open: true
     tty: true
+
 

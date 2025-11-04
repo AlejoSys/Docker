@@ -1,5 +1,5 @@
 
-FROM openjdk
+FROM openjdk:21-jdk
 WORKDIR /appdocker
 COPY . .
 RUN javac contenedor2/Cliente.java
